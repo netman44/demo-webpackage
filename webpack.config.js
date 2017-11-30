@@ -5,7 +5,7 @@ module.exports = {
   entry: __dirname + "/app/main.js",//已多次提及的唯一入口文件
   output: {
     path: __dirname + "/build",
-    filename: "bundle.js"
+    filename: "bundle-[name]-[id]-[hash].js"
   },
   devtool: 'eval-source-map',
   devServer: {
