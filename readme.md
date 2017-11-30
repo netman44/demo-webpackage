@@ -459,6 +459,186 @@ module.exports = {
 
 * 重新打包 `npm start`
 
+自此，以说明了处理JS的`Babel` 和处理CSS的`PostCSS`的基本用法。他们是两个独立的平台，配合`webpack`可以很好的发挥他们的作用。
+
+>
+这里重申一下，loader的作用是：可以使用外部的脚本或者工具，实现对不同格式的文件的处理。
+
+## plugin
+这一章将介绍webpack的另一个改了`plugin`。plugin是用来扩展webpack的功能的。作用域为`整个构建过程`，会在整个苟安过程中生效，执行相关的任务。
+
+与loader区别：
+* loader 在打包构建过程中用来预处理源文件的（JSX、Scss、Less）,一次处理一个文件。
+* plugin plugin不直接操作单个文件。它直接多整个构建过程起作用。
+
+### 使用方法
+使用流程：
+1、 npm安装
+2、webpack配置
+
+webpack有许多内置插件，也有许多第三方插件。
+
+### HtmlWebpackPlugin
+
+这个插件的作用是依据一个简单的index.html模板，生成一个自动引用你打包后的JS文件的新index.html。这在每次生成的js文件名称不同时非常有用（比如添加了hash值）。
+
+* 安装
+```
+npm install --save-dev html-webpack-plugin
+```
+* webpack 配置
+```
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+    entry: __dirname + "/app/main.js",//已多次提及的唯一入口文件
+    output: {
+        path: __dirname + "/build",
+        filename: "bundle.js"
+    },
+    devtool: 'eval-source-map',
+    devServer: {
+        contentBase: "./public",//本地服务器所加载的页面所在的目录
+        historyApiFallback: true,//不跳转
+        inline: true//实时刷新
+    },
+    module: {
+        rules: [
+            {
+                test: /(\.jsx|\.js)$/,
+                use: {
+                    loader: "babel-loader"
+                },
+                exclude: /node_modules/
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    {
+                        loader: "style-loader"
+                    }, {
+                        loader: "css-loader",
+                        options: {
+                            modules: true
+                        }
+                    }, {
+                        loader: "postcss-loader"
+                    }
+                ]
+            }
+        ]
+    },
+    plugins: [
+        new webpack.BannerPlugin('版权所有，翻版必究'),
+        new HtmlWebpackPlugin({
+            template: __dirname + "/app/index.tmpl.html"//new 一个这个插件的实例，并传入相关的参数
+        })
+    ],
+};
+```
+
+* 删除public ，npm start 会发现有build文件夹下生成了`bundle.js` 和`index.html`文件。
+
+### Hot module replacement
+
+热加载：本插件允许你在修改组件代码后，自动刷新实时预览修改后的效果。
+
+react项目实现热加载
+
+使用：
+1、在webpack配置文件中添加HMR插件；
+2、在Webpack Dev Server中添加“hot”参数；
+
+不过配置完这些后，JS模块其实还是不能自动热加载的，还需要在你的JS模块中执行一个Webpack提供的API才能实现热加载，虽然这个API不难使用，但是如果是React模块，使用我们已经熟悉的Babel可以更方便的实现功能热加载。
+
+整理下我们的思路，具体实现方法如下
+
+* Babel和webpack是独立的工具
+* 二者可以一起工作
+* 二者都可以通过插件拓展功能
+* HMR是一个webpack插件，它让你能浏览器中实时观察模块修改后的效果，但是如果你想让它工作，需要对模块进行额外的配额；
+* Babel有一个叫做react-transform-hrm的插件，可以在不对React模块进行额外的配置的前提下让HMR正常工作；
+
+配置：
+* webpack.config.js
+```
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+    entry: __dirname + "/app/main.js",//已多次提及的唯一入口文件
+    output: {
+        path: __dirname + "/build",
+        filename: "bundle.js"
+    },
+    devtool: 'eval-source-map',
+    devServer: {
+        contentBase: "./public",//本地服务器所加载的页面所在的目录
+        historyApiFallback: true,//不跳转
+        inline: true,
+        hot: true
+    },
+    module: {
+        rules: [
+            {
+                test: /(\.jsx|\.js)$/,
+                use: {
+                    loader: "babel-loader"
+                },
+                exclude: /node_modules/
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    {
+                        loader: "style-loader"
+                    }, {
+                        loader: "css-loader",
+                        options: {
+                            modules: true
+                        }
+                    }, {
+                        loader: "postcss-loader"
+                    }
+                ]
+            }
+        ]
+    },
+    plugins: [
+        new webpack.BannerPlugin('版权所有，翻版必究'),
+        new HtmlWebpackPlugin({
+            template: __dirname + "/app/index.tmpl.html"//new 一个这个插件的实例，并传入相关的参数
+        }),
+        new webpack.HotModuleReplacementPlugin()//热加载插件
+    ],
+};
+```
+* 安装 react-transform-hmr
+```
+npm install --save-dev babel-plugin-react-transform react-transform-hmr
+```
+
+* 配置Babel
+```
+// .babelrc
+{
+  "presets": ["react", "es2015"],
+  "env": {
+    "development": {
+    "plugins": [["react-transform", {
+       "transforms": [{
+         "transform": "react-transform-hmr",
+
+         "imports": ["react"],
+
+         "locals": ["module"]
+       }]
+     }]]
+    }
+  }
+}
+```
 
 
 ## 参考：
