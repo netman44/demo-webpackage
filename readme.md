@@ -718,3 +718,6 @@ webpack可以把一个哈希值添加到打包的文件名中，使用方法如�
 
 * [入门Webpack，看这篇就够了]([http://www.jianshu.com/p/42e11515c10f])
 * [webpack教程](http://www.jqhtml.com/7694.html)
+* [webpack for react](http://www.pro-react.com/materials/appendixA/)
+* [官方文档](https://webpack.js.org/plugins/banner-plugin/
+)
