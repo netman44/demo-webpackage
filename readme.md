@@ -640,6 +640,16 @@ npm install --save-dev babel-plugin-react-transform react-transform-hmr
 }
 ```
 
+## 产品构建
+目前为止，我们已经使用webpack构建了一个完整的开发环境。但是在产品阶段，可能还需要对打包的文件进行额外的处理，比如说优化，压缩，缓存以及分离CSS和JS。
+
+对于复杂的项目来说，需要复杂的配置，这时候分解配置文件为多个小的文件可以使得事情井井有条，以上面的例子来说，我们创建一个`webpack.production.config.js`的文件，在里面加上基本的配置,它和原始的webpack.config.js很像，如下
+
+### 优化插件
+
+* OccurenceOrderPlugin :为组件分配ID，通过这个插件webpack可以分析和优先考虑使用最多的模块，并为它们分配最小的ID
+* UglifyJsPlugin：压缩JS代码；
+* ExtractTextPlugin：分离CSS和JS文件
 
 ## 参考：
 
