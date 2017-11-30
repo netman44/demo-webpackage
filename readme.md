@@ -350,18 +350,23 @@ module.exports = {
 
 > 一切皆模块
 
-### css
+## css loader
 
-* css-loade：使你能够使用类似@import 和 url(...)的方法实现 require()的功
+webpack中常用的css相关的loader有两个：css-loader、style-loader.
+
+* css-loader：使你能够使用类似@import 和 url(...)的方法实现 require()的功
 * style-loader：将所有的计算后的样式加入页面中
 
 二者组合在一起使你能够把样式表嵌入webpack打包后的JS文件中。
 
-安装：
+* 安装：
 ```
 //安装
 npm install --save-dev style-loader css-loader
 ```
+
+* css Modules
+css module 就是把js的模块化思想引入css中。实现所有的类名、动画名默认都之作用于当前模块。
 
 ## 参考：
 
