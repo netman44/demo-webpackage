@@ -397,9 +397,9 @@ css module 就是把js的模块化思想引入css中。实现所有的类名、�
 ### css预处理
 处理想`sass、less`之类的对原生css扩展。
 
-* sass loader
-* less loader
-* stylus loader
+* [sass loader](https://github.com/jtangelder/sass-loader)
+* [less loader](https://github.com/webpack/less-loader)
+* [stylus loader](https://github.com/shama/stylus-loader)
 
 可以使用`-PostCSS` 预处理平台。可以帮组Css实现更多的功能。具体可查看 [官方文档](https://github.com/postcss/postcss)
 
