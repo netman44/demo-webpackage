@@ -359,15 +359,109 @@ webpack中常用的css相关的loader有两个：css-loader、style-loader.
 
 二者组合在一起使你能够把样式表嵌入webpack打包后的JS文件中。
 
-* 安装：
+### 安装：
 ```
 //安装
 npm install --save-dev style-loader css-loader
 ```
 
-* css Modules
+### css Modules
 css module 就是把js的模块化思想引入css中。实现所有的类名、动画名默认都之作用于当前模块。
+
+   在`css-loader`的添加modules属性。代码如下：
+   ```
+   module.exports = {
+        // ..其他设置
+     module: {
+       rules: [
+            //... 其他loader
+         {
+           test: /\.css$/,
+           use: [
+             {
+               loader: "style-loader"
+             },
+             {
+               loader: "css-loader",
+               options: {
+                 modules: true
+               }
+             }
+           ]
+         }
+       ]
+     }
+
+   };
+   ```
+### css预处理
+处理想`sass、less`之类的对原生css扩展。
+
+* sass loader
+* less loader
+* stylus loader
+
+可以使用`-PostCSS` 预处理平台。可以帮组Css实现更多的功能。具体可查看 [官方文档](https://github.com/postcss/postcss)
+
+`PostCSS`有非常多的CSS预处理扩展，我们以处理自动为CSS代码添加适应不同浏览器的前缀为例。需要用到
+>
+* postcss-loader（postcss 插件）
+* autoprefixer(自动添加前缀插件)
+
+* 命令
+```
+npm install --save-dev postcss-loader autoprefixer
+```
+
+* webpack.config.js添加如下代码：
+```
+//webpack.config.js
+module.exports = {
+    ...
+    module: {
+        rules: [
+            {
+                test: /(\.jsx|\.js)$/,
+                use: {
+                    loader: "babel-loader"
+                },
+                exclude: /node_modules/
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    {
+                        loader: "style-loader"
+                    }, {
+                        loader: "css-loader",
+                        options: {
+                            modules: true
+                        }
+                    }, {
+                        loader: "postcss-loader"
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+* 新建postcss.config.js。并添加如下代码：
+```
+// postcss.config.js
+module.exports = {
+    plugins: [
+        require('autoprefixer')
+    ]
+}
+```
+
+* 重新打包 `npm start`
+
+
 
 ## 参考：
 
 * [入门Webpack，看这篇就够了]([http://www.jianshu.com/p/42e11515c10f])
+* [webpack教程](http://www.jqhtml.com/7694.html)
