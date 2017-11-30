@@ -340,7 +340,28 @@ module.exports = {
 
 现在就可以愉快的使用react 了。
 
+### 分拆babel配置
 
+`babel`会有非常多的配置。需要进行拆分，拆分出`.babelrc`配置文件。
+
+到目前为止，我们已经知道了，对于模块，Webpack能提供非常强大的处理功能，那那些是模块呢。
+
+## webpack处理模块。
+
+> 一切皆模块
+
+### css
+
+* css-loade：使你能够使用类似@import 和 url(...)的方法实现 require()的功
+* style-loader：将所有的计算后的样式加入页面中
+
+二者组合在一起使你能够把样式表嵌入webpack打包后的JS文件中。
+
+安装：
+```
+//安装
+npm install --save-dev style-loader css-loader
+```
 
 ## 参考：
 
